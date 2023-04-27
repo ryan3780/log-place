@@ -11,11 +11,14 @@
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.24",
     "@types/react": "^18.0.38",
+    "@types/react-datepicker": "^4.10.0",
     "@types/react-dom": "^18.0.11",
     "apollo-boost": "^0.4.9",
+    "concurrently": "^8.0.1",
     "graphql": "^16.6.0",
     "json-graphql-server": "^2.3.2",
     "react": "^18.2.0",
+    "react-datepicker": "^4.11.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
@@ -30,7 +33,8 @@
     "build": "run-s build:css react-scripts:build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "json-server-gql": "json-graphql-server db.js --p 4000"
+    "json-server-gql": "json-graphql-server db.js --p 4000",
+    "dev": "concurrently \"yarn start\" \"yarn run json-server-gql\" "
   },
   "eslintConfig": {
     "extends": [
