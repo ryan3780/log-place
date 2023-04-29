@@ -4,9 +4,11 @@ export const GET_AllLogs = gql`
   query {
     allLogs {
       id
-      name
+      oneLineComment
       date
       imageUrl
+      lat
+      longt
     }
   }
 `;

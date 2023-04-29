@@ -8,7 +8,7 @@ const LogCard = (CardInfo: LogCardElement) => {
     <a href={String(CardInfo.id)}>
       <img src={CardInfo.imageUrl} alt="업로드 이미지" />
       <div>
-        {CardInfo.name}
+        {CardInfo.oneLineComment}
       </div>
       <div>
         {CardInfo.date}

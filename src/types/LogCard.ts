@@ -1,6 +1,8 @@
 export interface LogCardElement {
-  id: number,
-  name: string,
-  date: string,
+  id: number
+  oneLineComment: string
+  date: string
   imageUrl: string
+  lat: string
+  longt: string
 }

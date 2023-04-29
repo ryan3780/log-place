@@ -21,9 +21,9 @@ const Home = () => {
   return (
     <div className="flex justify-center items-center">
       <div className="grid grid-cols-3 justify-items-center gap-4">
-        {allLogsData.map((toy, idx) => {
+        {allLogsData.map((log, idx) => {
           return (
-            <LogCard key={idx} id={toy.id} name={toy.name} date={toy.date} imageUrl={toy.imageUrl} />
+            <LogCard key={idx} {...log} />
           )
         })}
       </div>

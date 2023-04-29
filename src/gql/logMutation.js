@@ -1,12 +1,14 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_NewLog = gql`
-  mutation ($name: String!, $date: String!, $imageUrl: String!) {
-    createLog(name: $name, date: $date, imageUrl: $imageUrl) {
+  mutation ($oneLineComment: String!, $date: String!, $imageUrl: String! $lat: Float, $longt : Float ) {
+    createLog(oneLineComment: $oneLineComment, date: $date, imageUrl: $imageUrl, lat:$lat, longt:$longt) {
       id
-      name
+      oneLineComment
       date
       imageUrl
+      lat
+      longt
     }
   }
 `;
