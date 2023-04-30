@@ -9,7 +9,6 @@ import { ko } from 'date-fns/esm/locale';
 import EXIF from "exif-js";
 import GMap from "../components/GMap";
 import { useCheckNetwork } from "../hooks/useCheckNetwork";
-import { useEffect } from "react";
 
 
 interface ExifProps {

@@ -1,5 +1,6 @@
-import { GoogleMap, Marker, MarkerF, useJsApiLoader } from '@react-google-maps/api';
-import { useCallback, useState } from 'react';
+import { GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api';
+import React from 'react';
+import { useState } from 'react';
 
 
 interface googleMapProps {
@@ -11,7 +12,6 @@ const containerStyle = {
   width: '400px',
   height: '400px'
 };
-
 
 const GMap = (position: googleMapProps) => {
   const { isLoaded } = useJsApiLoader({
