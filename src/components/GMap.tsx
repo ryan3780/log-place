@@ -1,6 +1,4 @@
 import { GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api';
-import React from 'react';
-import { useState } from 'react';
 
 
 interface googleMapProps {
@@ -19,8 +17,6 @@ const GMap = (position: googleMapProps) => {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY
   })
 
-  const [map, setMap] = useState(null)
-
   const center = {
     lat: position.lat,
     lng: position.lng
@@ -33,7 +29,6 @@ const GMap = (position: googleMapProps) => {
       zoom={15}
 
     >
-      { /* Child components, such as markers, info windows, etc. */}
       <MarkerF position={center} />
     </GoogleMap>
   ) : <></>

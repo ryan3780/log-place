@@ -127,9 +127,6 @@ const Add = () => {
 
   const net = useCheckNetwork()
 
-  console.log(net)
-
-
   return (
 
     <div className="w-full max-w-xs">

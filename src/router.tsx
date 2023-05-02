@@ -4,6 +4,7 @@ import { Router as RemixRouter } from '@remix-run/router/dist/router'
 import Home from './pages/Home'
 import GeneralLayout from './layout/GeneralLayout'
 import Add from './pages/Add'
+import Detail from './pages/Detail'
 
 
 
@@ -13,6 +14,7 @@ interface RouterElement {
   label: string // 사이드바에 표시할 페이지 이름
   element: React.ReactNode // 페이지 엘리먼트
   withHeader?: boolean // 헤더가 필요한지 여부
+  includeMenu?: boolean;
 }
 
 const routerData: RouterElement[] = [
@@ -21,15 +23,17 @@ const routerData: RouterElement[] = [
     path: '/',
     label: 'Home',
     element: <Home />,
-    withHeader: true
+    withHeader: true,
+    includeMenu: true
   },
   {
     id: 1,
     path: '/add',
     label: 'add',
     element: <Add />,
-    withHeader: true
-  }
+    withHeader: true,
+    includeMenu: true
+  },
   // {
   //   id: 1,
   //   path: '/login',
@@ -37,13 +41,14 @@ const routerData: RouterElement[] = [
   //   element: <Login />,
   //   withAuth: false
   // },
-  // {
-  //   id: 2,
-  //   path: '/detail',
-  //   label: '상세 페이지',
-  //   element: <Detail />,
-  //   withHeader: true
-  // },
+  {
+    id: 2,
+    path: '/detail/:id',
+    label: '',
+    element: <Detail />,
+    withHeader: true,
+    includeMenu: false
+  },
   // {
   //   id: 3,
   //   path: '/page-b',
@@ -79,7 +84,11 @@ export const routers: RemixRouter = createBrowserRouter(
 
 export const HeaderContent: HeaderElement[] = routerData.reduce((prev, router) => {
 
+  console.log(prev, router)
+
   if (!router.withHeader) return prev
+
+  if (!router.includeMenu) return prev
 
   return [
     ...prev,

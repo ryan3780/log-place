@@ -12,3 +12,16 @@ export const GET_AllLogs = gql`
     }
   }
 `;
+
+export const GET_OneLog = gql`
+query ($id : ID!) {
+  Log(id : $id) {
+    id
+    oneLineComment
+    date
+    imageUrl
+    lat
+    longt
+  }
+}
+`
