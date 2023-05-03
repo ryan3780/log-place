@@ -129,23 +129,29 @@ const Add = (edit: editProps) => {
   }
 
   const logDateHandler = (currentDate: Date) => {
-
     setSelectedDate(currentDate)
-
+    // if (new Date(edit.info.date.replace(/[^0-9]/g, " ")) !== currentDate) {
+    // } else {
+    //   setSelectedDate(new Date(edit.info.date.replace(/[^0-9]/g, " ")))
+    // }
   }
 
-  const net = useCheckNetwork()
-  const regex = /[^0-9]/g;
+  useEffect(() => {
+    if (edit.isEdit) {
+      setSelectedDate(new Date(edit.info.date.replace(/[^0-9]/g, " ")))
+    }
+  }, [])
 
-  console.log(selectedDate)
-  console.log()
+  const net = useCheckNetwork()
+
 
   return (
 
     <div className="w-full max-w-xs">
-      {edit.isEdit && preview === "" ? <img src={edit.info.imageUrl} alt="업로드 이미지" /> : null}
-      {preview !== "" ? <img className="w-fit" src={preview != "" ? String(preview) : ""} alt="미리보기" /> : null}
+
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" >
+        {edit.isEdit && preview === "" ? <img src={edit.info.imageUrl} alt="업로드 이미지" /> : null}
+        {preview !== "" ? <img className="w-fit" src={preview != "" ? String(preview) : ""} alt="미리보기" /> : null}
         <input className="fileInput" type="file" ref={imgFile} onChange={imgFileHandler} accept=".gif, .jpg, .png, .jpeg" />
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
