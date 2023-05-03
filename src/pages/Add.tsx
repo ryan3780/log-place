@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_NewLog } from "../gql/logMutation";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import { ko } from 'date-fns/esm/locale';
 import EXIF from "exif-js";
 import GMap from "../components/GMap";
 import { useCheckNetwork } from "../hooks/useCheckNetwork";
+import { LogCardElement } from "../types/LogCard";
 
 
 interface ExifProps {
@@ -19,13 +20,21 @@ interface ExifProps {
   GPSLongitudeRef?: String
 }
 
-const Add = () => {
+interface editProps {
+  isEdit?: boolean
+  info?: LogCardElement
+}
+
+const Add = (edit: editProps) => {
+
+  console.log(edit)
 
   const [preview, setPreview] = useState<String>("");
   const [selectedDate, setSelectedDate] = useState<Date>(null);
   const [logDate, setLogDate] = useState<String>("");
   const [lat, setLat] = useState<number>(null);
   const [longt, setLongt] = useState<number>(null);
+
 
   const logText = useRef<HTMLInputElement>();
   const imgFile = useRef<HTMLInputElement>();
@@ -43,7 +52,7 @@ const Add = () => {
   const submitHandler = () => {
     addLog({
       variables: {
-        oneLineComment: logText.current.value,
+        oneLineComment: !logText.current.value ? edit.info.oneLineComment : logText.current.value,
         date: new Intl.DateTimeFormat('ko', { dateStyle: "full" }).format(selectedDate),
         imageUrl: "https://picsum.photos/300/200",
         lat: lat,
@@ -126,18 +135,25 @@ const Add = () => {
   }
 
   const net = useCheckNetwork()
+  const regex = /[^0-9]/g;
+
+  console.log(selectedDate)
+  console.log()
 
   return (
 
     <div className="w-full max-w-xs">
-      {preview != "" ? <img className="w-fit" src={preview != "" ? String(preview) : ""} alt="미리보기" /> : null}
+      {edit.isEdit && preview === "" ? <img src={edit.info.imageUrl} alt="업로드 이미지" /> : null}
+      {preview !== "" ? <img className="w-fit" src={preview != "" ? String(preview) : ""} alt="미리보기" /> : null}
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" >
         <input className="fileInput" type="file" ref={imgFile} onChange={imgFileHandler} accept=".gif, .jpg, .png, .jpeg" />
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
             추억을 위한 한줄
           </label>
-          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username" ref={logText} />
+          {edit && edit.info ? <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder={edit.info.oneLineComment} ref={logText} /> : <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username" ref={logText} />}
+
+
         </div>
         {logDate ? logDate :
           <DatePicker

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import GMap from "../components/GMap";
 import { GET_OneLog } from "../gql/logQuery";
+import { useRouter } from "../hooks/useRouter";
 import { LogCardElement } from "../types/LogCard";
 
 const Detail = () => {
@@ -21,19 +22,29 @@ const Detail = () => {
     }
   }, [data]);
 
+
+  const { routeTo } = useRouter()
+
+  const updateLog = () => {
+    routeTo(`/edit/${id}`, oneLog)
+  }
+
   return (
 
     <div>
+      <button onClick={updateLog}>Edit</button>
       {oneLog &&
         <div>
-          <img src={oneLog.imageUrl} alt="업로드 이미지" /><div>
-            {oneLog.oneLineComment}
-          </div><div>
-            {oneLog.date}
-          </div>
-          {oneLog.lat && oneLog.longt &&
-            <GMap lat={parseInt(oneLog.lat)} lng={parseInt(oneLog.longt)} />}
 
+          <div>
+            <img src={oneLog.imageUrl} alt="업로드 이미지" /><div>
+              {oneLog.oneLineComment}
+            </div><div>
+              {oneLog.date}
+            </div>
+            {oneLog.lat && oneLog.longt &&
+              <GMap lat={parseInt(oneLog.lat)} lng={parseInt(oneLog.longt)} />}
+          </div>
         </div>}
 
     </div>

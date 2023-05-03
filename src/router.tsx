@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import GeneralLayout from './layout/GeneralLayout'
 import Add from './pages/Add'
 import Detail from './pages/Detail'
+import Edit from './pages/Edit'
 
 
 
@@ -34,13 +35,7 @@ const routerData: RouterElement[] = [
     withHeader: true,
     includeMenu: true
   },
-  // {
-  //   id: 1,
-  //   path: '/login',
-  //   label: '로그인',
-  //   element: <Login />,
-  //   withAuth: false
-  // },
+
   {
     id: 2,
     path: '/detail/:id',
@@ -49,6 +44,21 @@ const routerData: RouterElement[] = [
     withHeader: true,
     includeMenu: false
   },
+  {
+    id: 3,
+    path: '/edit/:id',
+    label: '',
+    element: <Edit />,
+    withHeader: true,
+    includeMenu: false
+  },
+  // {
+  //   id: 1,
+  //   path: '/login',
+  //   label: '로그인',
+  //   element: <Login />,
+  //   withAuth: false
+  // },
   // {
   //   id: 3,
   //   path: '/page-b',
@@ -83,8 +93,6 @@ export const routers: RemixRouter = createBrowserRouter(
 )
 
 export const HeaderContent: HeaderElement[] = routerData.reduce((prev, router) => {
-
-  console.log(prev, router)
 
   if (!router.withHeader) return prev
 
