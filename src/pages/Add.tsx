@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useMutation } from "@apollo/client";
-import { CREATE_NewLog } from "../gql/logMutation";
-import { useNavigate } from "react-router-dom";
+import { CREATE_NewLog, UPDATE_Log } from "../gql/logMutation";
 import { useState } from "react";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -10,6 +9,7 @@ import EXIF from "exif-js";
 import GMap from "../components/GMap";
 import { useCheckNetwork } from "../hooks/useCheckNetwork";
 import { LogCardElement } from "../types/LogCard";
+import { useNavigate } from "react-router-dom";
 
 
 interface ExifProps {
@@ -27,18 +27,14 @@ interface editProps {
 
 const Add = (edit: editProps) => {
 
-  console.log(edit)
-
-  const [preview, setPreview] = useState<String>("");
+  const [preview, setPreview] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<Date>(null);
-  const [logDate, setLogDate] = useState<String>("");
+  const [logDate, setLogDate] = useState<string>("");
   const [lat, setLat] = useState<number>(null);
   const [longt, setLongt] = useState<number>(null);
 
-
   const logText = useRef<HTMLInputElement>();
   const imgFile = useRef<HTMLInputElement>();
-  const imageUrl = useRef();
 
   const position = {
     lat: lat,
@@ -46,24 +42,89 @@ const Add = (edit: editProps) => {
   }
 
   const [addLog] = useMutation(CREATE_NewLog);
+  const [updateLog] = useMutation(UPDATE_Log);
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const submitHandler = () => {
-    addLog({
-      variables: {
-        oneLineComment: !logText.current.value ? edit.info.oneLineComment : logText.current.value,
-        date: new Intl.DateTimeFormat('ko', { dateStyle: "full" }).format(selectedDate),
-        imageUrl: "https://picsum.photos/300/200",
-        lat: lat,
-        longt: longt
-      },
-    }).then(() => {
-      // navigate("/");
-      console.log(addLog)
-    });
+    if (edit.isEdit) {
+      updateLog({
+        variables: {
+          id: edit.info.id,
+          oneLineComment: !logText.current.value ? edit.info.oneLineComment : logText.current.value,
+          date: new Intl.DateTimeFormat('ko', { dateStyle: "full" }).format(selectedDate),
+          imageUrl: preview,
+          lat: lat,
+          longt: longt
+        }
+      }).then(() => {
+        navigate("/")
+      });
+
+    } else {
+      addLog({
+        variables: {
+          oneLineComment: logText.current.value,
+          date: new Intl.DateTimeFormat('ko', { dateStyle: "full" }).format(selectedDate),
+          imageUrl: preview,
+          lat: lat,
+          longt: longt
+        },
+      }).then(() => {
+        navigate("/")
+      });
+    }
   };
 
+  const alertHandler = () => {
+    alert("용량이 너무 큽니다.")
+    setPreview("")
+    imgFile.current.value = ""
+  }
+
+  const resizeImage = async (base64Str: string, maxWidth = 600, maxHeight = 400) => {
+    const res = await new Promise(resolve => {
+      let img = new Image();
+      img.src = base64Str;
+      img.onload = () => {
+        let canvas = document.createElement("canvas");
+        const MAX_WIDTH = maxWidth;
+        const MAX_HEIGHT = maxHeight;
+        let width = img.width;
+        let height = img.height;
+        let shouldResize = false;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+            shouldResize = true;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+            shouldResize = true;
+          }
+        }
+        if (shouldResize) {
+          canvas.width = width;
+          canvas.height = height;
+          let ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL("image/jpeg", 0.9));
+
+        } else {
+          resolve(base64Str);
+        }
+      };
+    });
+
+    if (String(res).length > 100000) {
+      return alertHandler()
+    }
+    setPreview(String(res));
+  }
 
   const imgFileHandler = () => {
 
@@ -72,8 +133,8 @@ const Add = (edit: editProps) => {
       const reader = new FileReader();
 
       reader.onload = () => {
-        setPreview(reader.result as String)
-
+        setPreview(reader.result as string)
+        resizeImage(reader.result as string)
       }
       reader.readAsDataURL(imgFile.current.files[0])
 
@@ -101,7 +162,7 @@ const Add = (edit: editProps) => {
             decimalLatitude = latDegree + (latMin / 60) + (latSec / 3600)
           }
 
-          if (GPSLongitudeRef == "W") {
+          if (GPSLongitudeRef === "W") {
             deciamlLongitude = -(longDegree + (longMin / 60) + (longSec / 3600))
           } else {
             deciamlLongitude = longDegree + (longMin / 60) + (longSec / 3600)
@@ -111,6 +172,7 @@ const Add = (edit: editProps) => {
           setLongt(deciamlLongitude)
           setLogDate(new Intl.DateTimeFormat('ko', { dateStyle: "full" }).format(new Date(DateTime.split(" ")[0].replaceAll(":", "-"))))
 
+          logDateHandler(new Date(DateTime.split(" ")[0].replaceAll(":", "-")))
         } else {
           setLogDate("")
           setLat(null)
@@ -129,20 +191,21 @@ const Add = (edit: editProps) => {
   }
 
   const logDateHandler = (currentDate: Date) => {
+
     setSelectedDate(currentDate)
-    // if (new Date(edit.info.date.replace(/[^0-9]/g, " ")) !== currentDate) {
-    // } else {
-    //   setSelectedDate(new Date(edit.info.date.replace(/[^0-9]/g, " ")))
-    // }
+
   }
 
   useEffect(() => {
     if (edit.isEdit) {
       setSelectedDate(new Date(edit.info.date.replace(/[^0-9]/g, " ")))
+      setPreview(edit.info.imageUrl)
     }
-  }, [])
+  }, [edit])
+
 
   const net = useCheckNetwork()
+
 
 
   return (
@@ -150,14 +213,14 @@ const Add = (edit: editProps) => {
     <div className="w-full max-w-xs">
 
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" >
-        {edit.isEdit && preview === "" ? <img src={edit.info.imageUrl} alt="업로드 이미지" /> : null}
-        {preview !== "" ? <img className="w-fit" src={preview != "" ? String(preview) : ""} alt="미리보기" /> : null}
+        {edit.isEdit && preview === "" ? <img src={edit.info.imageUrl} alt="업로드 이미지" loading="lazy" /> : null}
+        {preview !== "" ? <img className="w-fit" src={preview !== "" ? String(preview) : ""} alt="미리보기" /> : null}
         <input className="fileInput" type="file" ref={imgFile} onChange={imgFileHandler} accept=".gif, .jpg, .png, .jpeg" />
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
             추억을 위한 한줄
           </label>
-          {edit && edit.info ? <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder={edit.info.oneLineComment} ref={logText} /> : <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username" ref={logText} />}
+          {edit && edit.info ? <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="editInput" type="text" placeholder={edit.info.oneLineComment} ref={logText} required /> : <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="addInput" type="text" placeholder="" ref={logText} required />}
 
 
         </div>
@@ -174,8 +237,6 @@ const Add = (edit: editProps) => {
             selected={selectedDate}    // value
             onChange={(date) => logDateHandler(date)}    // 날짜를 선택하였을 때 실행될 함수
           />}
-
-
 
       </form>
       {lat !== null && longt !== null && net && < GMap {...position} />}

@@ -1,7 +1,8 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import GMap from "../components/GMap";
+import { DELETE_Log } from "../gql/logMutation";
 import { GET_OneLog } from "../gql/logQuery";
 import { useRouter } from "../hooks/useRouter";
 import { LogCardElement } from "../types/LogCard";
@@ -29,10 +30,27 @@ const Detail = () => {
     routeTo(`/edit/${id}`, oneLog)
   }
 
+  const [deleteLog] = useMutation(DELETE_Log);
+
+  const DeleteLog = () => {
+
+    deleteLog({
+      variables: {
+        id: Number(id)
+      }
+    }).then(() => {
+      routeTo('/')
+    });
+
+  }
+
   return (
 
     <div>
-      <button onClick={updateLog}>Edit</button>
+      <div className="justify-evenly flex">
+        <button onClick={updateLog}>Edit</button>
+        <button onClick={DeleteLog}>Delete</button>
+      </div>
       {oneLog &&
         <div>
 
