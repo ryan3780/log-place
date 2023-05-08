@@ -17,22 +17,21 @@ const Header: React.FC<HeaderProps> = ({ HeaderContent }) => {
   }
 
   return (
-    <nav className="sticky top-0 w-full h-20 border-b bg-white">
+    <nav className="sticky top-0 w-full h-36 border-b bg-white">
       <div className="justify-center flex h-full items-center">
-        <div className=""><a href='/'><img src={logo} alt="logo" /></a></div>
-        <ul>
-          {HeaderContent.map((element) => {
-            return (
-              <li
-                key={element.path}
-                className={currentPath === element.path ? 'header-menu selected' : 'header-menu'}
-                onClick={() => HeaderMenuClickHandler(element.path)}>
-                {element.label}
-              </li>
-            )
-          })
-          }
-        </ul>
+        <div><a href='/'><img src={logo} alt="logo" /></a></div>
+        {HeaderContent.map((element) => {
+          return (
+            <div
+              key={element.path}
+              className={currentPath === element.path ? 'header-menu selected ml-12 text-3xl font-sans cursor-pointer text-purple-400' : 'header-menu ml-12 text-3xl font-sans cursor-pointer'}
+              onClick={() => HeaderMenuClickHandler(element.path)}>
+              {element.label}
+            </div>
+          )
+        })
+        }
+
       </div>
     </nav>)
 }

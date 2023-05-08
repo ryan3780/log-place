@@ -47,11 +47,12 @@ const Add = (edit: editProps) => {
   const navigate = useNavigate()
 
   const validateSubmit = () => {
+
     if (!logText.current.value) {
       alert("input")
       return false
     }
-    else if (!imgFile.current.files.length) {
+    else if (!preview) {
       alert("no img")
       return false
     }
@@ -152,7 +153,6 @@ const Add = (edit: editProps) => {
       const reader = new FileReader();
 
       reader.onload = () => {
-        setLogDate("")
         setPreview(reader.result as string)
         resizeImage(reader.result as string)
       }
@@ -194,6 +194,7 @@ const Add = (edit: editProps) => {
 
           logDateHandler(new Date(DateTime.split(" ")[0].replaceAll(":", "-")))
         } else {
+
           setLogDate("")
           setLat(null)
           setLongt(null)
@@ -211,7 +212,7 @@ const Add = (edit: editProps) => {
   }
 
   const logDateHandler = (currentDate: Date) => {
-
+    setLogDate(new Intl.DateTimeFormat('ko', { dateStyle: "full" }).format(new Date(currentDate)))
     setSelectedDate(currentDate)
 
   }
@@ -220,13 +221,16 @@ const Add = (edit: editProps) => {
     if (edit.isEdit) {
       setSelectedDate(new Date(edit.info.date.replace(/[^0-9]/g, " ")))
       setPreview(edit.info.imageUrl)
+      setLogDate(edit.info.date)
+      logText.current.value = edit.info.oneLineComment
+
     }
   }, [edit])
 
 
   const net = useCheckNetwork()
 
-
+  console.log(logDate)
 
   return (
 
@@ -244,7 +248,7 @@ const Add = (edit: editProps) => {
 
 
         </div>
-        {logDate ? logDate :
+        {logDate && !edit.isEdit ? logDate :
           <DatePicker
             showMonthDropdown
             showYearDropdown
@@ -257,6 +261,7 @@ const Add = (edit: editProps) => {
             selected={selectedDate}    // value
             onChange={(date) => logDateHandler(date)}    // 날짜를 선택하였을 때 실행될 함수
           />}
+
       </form>
       {lat !== null && longt !== null && net && < GMap {...position} />}
       <button onClick={submitHandler} >test Btn</button>

@@ -15,17 +15,43 @@ const Home = () => {
   useEffect(() => {
     if (data?.allLogs) {
       setAllLogsData(data.allLogs);
+
     }
+
   }, [data]);
+
+
+  let gridEnd = Math.floor(allLogsData.length / 3)
+
+  let log1 = [...allLogsData.slice(0, gridEnd)]
+  let log2 = [...allLogsData.slice(gridEnd, gridEnd * 2)]
+  let log3 = [...allLogsData.slice(gridEnd * 2)]
+
 
   return (
     <div className="flex justify-center items-center">
       <div className="grid grid-cols-3 justify-items-center gap-4">
-        {allLogsData.map((log, idx) => {
-          return (
-            <LogCard key={idx} {...log} />
-          )
-        })}
+        <div>
+          {log1.map((log, idx) => {
+            return (
+              <LogCard key={idx} {...log} />
+            )
+          })}
+        </div>
+        <div>
+          {log2.map((log, idx) => {
+            return (
+              <LogCard key={idx} {...log} />
+            )
+          })}
+        </div>
+        <div>
+          {log3.map((log, idx) => {
+            return (
+              <LogCard key={idx} {...log} />
+            )
+          })}
+        </div>
       </div>
     </div>
   )

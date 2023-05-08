@@ -48,8 +48,8 @@ const Detail = () => {
 
     <div>
       <div className="justify-evenly flex">
-        <button onClick={updateLog}>Edit</button>
-        <button onClick={DeleteLog}>Delete</button>
+        <button onClick={updateLog} className="cursor-pointer">Edit</button>
+        <button onClick={DeleteLog} className="cursor-pointer">Delete</button>
       </div>
       {oneLog &&
         <div>
