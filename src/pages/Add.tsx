@@ -46,7 +46,26 @@ const Add = (edit: editProps) => {
 
   const navigate = useNavigate()
 
+  const validateSubmit = () => {
+    if (!logText.current.value) {
+      alert("input")
+      return false
+    }
+    else if (!imgFile.current.files.length) {
+      alert("no img")
+      return false
+    }
+    else if (!logDate) {
+      alert("no Date")
+      return false
+    }
+    return true
+  }
+
   const submitHandler = () => {
+
+    if (!validateSubmit()) return
+
     if (edit.isEdit) {
       updateLog({
         variables: {
@@ -133,6 +152,7 @@ const Add = (edit: editProps) => {
       const reader = new FileReader();
 
       reader.onload = () => {
+        setLogDate("")
         setPreview(reader.result as string)
         resizeImage(reader.result as string)
       }
@@ -220,7 +240,7 @@ const Add = (edit: editProps) => {
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
             추억을 위한 한줄
           </label>
-          {edit && edit.info ? <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="editInput" type="text" placeholder={edit.info.oneLineComment} ref={logText} required /> : <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="addInput" type="text" placeholder="" ref={logText} required />}
+          {edit && edit.info ? <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="editInput" type="text" placeholder={edit.info.oneLineComment} ref={logText} /> : <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="addInput" type="text" placeholder="" ref={logText} />}
 
 
         </div>
@@ -237,7 +257,6 @@ const Add = (edit: editProps) => {
             selected={selectedDate}    // value
             onChange={(date) => logDateHandler(date)}    // 날짜를 선택하였을 때 실행될 함수
           />}
-
       </form>
       {lat !== null && longt !== null && net && < GMap {...position} />}
       <button onClick={submitHandler} >test Btn</button>
