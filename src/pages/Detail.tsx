@@ -44,26 +44,35 @@ const Detail = () => {
 
   }
 
+  console.log(oneLog)
+
   return (
 
     <div>
-      <div className="justify-evenly flex">
+
+      <div className="flex justify-center items-center">
+        {oneLog &&
+          <>
+            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 ">
+              <img className="w-[300px] h-[400px]" src={oneLog.imageUrl} alt="업로드 이미지" /><div>
+                {oneLog.oneLineComment}
+              </div><div>
+                {oneLog.date}
+              </div>
+            </div>
+            <div className="flex flex-col items-center w-[500px] pl-[40px]">
+              {oneLog && oneLog.lat && oneLog.longt ?
+                <GMap lat={parseInt(oneLog.lat)} lng={parseInt(oneLog.longt)} /> : <div className="w-[400px] text-center">  위치 정보가 없습니다. </div>}
+
+            </div>
+          </>
+        }
+
+      </div>
+      {oneLog && <div className="justify-evenly flex">
         <button onClick={updateLog} className="cursor-pointer">Edit</button>
         <button onClick={DeleteLog} className="cursor-pointer">Delete</button>
-      </div>
-      {oneLog &&
-        <div>
-
-          <div>
-            <img src={oneLog.imageUrl} alt="업로드 이미지" /><div>
-              {oneLog.oneLineComment}
-            </div><div>
-              {oneLog.date}
-            </div>
-            {oneLog.lat && oneLog.longt &&
-              <GMap lat={parseInt(oneLog.lat)} lng={parseInt(oneLog.longt)} />}
-          </div>
-        </div>}
+      </div>}
 
     </div>
   )

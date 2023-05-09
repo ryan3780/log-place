@@ -17,9 +17,9 @@ const Header: React.FC<HeaderProps> = ({ HeaderContent }) => {
   }
 
   return (
-    <nav className="sticky top-0 w-full h-36 border-b bg-white">
+    <nav className="sticky top-0 w-full border-b bg-white z-[2]">
       <div className="justify-center flex h-full items-center">
-        <div><a href='/'><img src={logo} alt="logo" /></a></div>
+        <div><a href='/'><img src={logo} alt="logo" className='w-[55%]' /></a></div>
         {HeaderContent.map((element) => {
           return (
             <div

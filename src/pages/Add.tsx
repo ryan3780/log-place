@@ -10,6 +10,7 @@ import GMap from "../components/GMap";
 import { useCheckNetwork } from "../hooks/useCheckNetwork";
 import { LogCardElement } from "../types/LogCard";
 import { useNavigate } from "react-router-dom";
+import nothing from '../assets/nothing.png'
 
 
 interface ExifProps {
@@ -47,7 +48,7 @@ const Add = (edit: editProps) => {
   const navigate = useNavigate()
 
   const validateSubmit = () => {
-
+    console.log(logDate)
     if (!logText.current.value) {
       alert("input")
       return false
@@ -65,6 +66,7 @@ const Add = (edit: editProps) => {
 
   const submitHandler = () => {
 
+
     if (!validateSubmit()) return
 
     if (edit.isEdit) {
@@ -79,7 +81,7 @@ const Add = (edit: editProps) => {
         }
       }).then(() => {
         navigate("/")
-      });
+      })
 
     } else {
       addLog({
@@ -92,7 +94,9 @@ const Add = (edit: editProps) => {
         },
       }).then(() => {
         navigate("/")
-      });
+      }).catch((err) => {
+        console.log(err)
+      })
     }
   };
 
@@ -141,6 +145,8 @@ const Add = (edit: editProps) => {
     });
 
     if (String(res).length > 100000) {
+      setLogDate("")
+      setSelectedDate(null)
       return alertHandler()
     }
     setPreview(String(res));
@@ -153,8 +159,12 @@ const Add = (edit: editProps) => {
       const reader = new FileReader();
 
       reader.onload = () => {
+
+        // setLogDate("")
+        // setSelectedDate(null)
         setPreview(reader.result as string)
         resizeImage(reader.result as string)
+
       }
       reader.readAsDataURL(imgFile.current.files[0])
 
@@ -191,11 +201,13 @@ const Add = (edit: editProps) => {
           setLat(decimalLatitude)
           setLongt(deciamlLongitude)
           setLogDate(new Intl.DateTimeFormat('ko', { dateStyle: "full" }).format(new Date(DateTime.split(" ")[0].replaceAll(":", "-"))))
+          // logDateHandler(new Date(DateTime.split(" ")[0].replaceAll(":", "-")))
 
-          logDateHandler(new Date(DateTime.split(" ")[0].replaceAll(":", "-")))
+
         } else {
 
           setLogDate("")
+          setSelectedDate(null)
           setLat(null)
           setLongt(null)
         }
@@ -203,8 +215,10 @@ const Add = (edit: editProps) => {
       });
 
     } else {
+
       setPreview("")
       setLogDate("")
+      setSelectedDate(null)
       setLat(null)
       setLongt(null)
     }
@@ -212,7 +226,7 @@ const Add = (edit: editProps) => {
   }
 
   const logDateHandler = (currentDate: Date) => {
-    setLogDate(new Intl.DateTimeFormat('ko', { dateStyle: "full" }).format(new Date(currentDate)))
+
     setSelectedDate(currentDate)
 
   }
@@ -222,10 +236,13 @@ const Add = (edit: editProps) => {
       setSelectedDate(new Date(edit.info.date.replace(/[^0-9]/g, " ")))
       setPreview(edit.info.imageUrl)
       setLogDate(edit.info.date)
+      setLat(Number(edit.info.lat))
+      setLongt(Number(edit.info.longt))
       logText.current.value = edit.info.oneLineComment
 
     }
   }, [edit])
+
 
 
   const net = useCheckNetwork()
@@ -234,11 +251,11 @@ const Add = (edit: editProps) => {
 
   return (
 
-    <div className="w-full max-w-xs">
+    <div className="flex justify-center items-center">
+      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 " >
 
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" >
-        {edit.isEdit && preview === "" ? <img src={edit.info.imageUrl} alt="업로드 이미지" loading="lazy" /> : null}
-        {preview !== "" ? <img className="w-fit" src={preview !== "" ? String(preview) : ""} alt="미리보기" /> : null}
+        {edit.isEdit && preview === "" ? <img className="w-[300px] h-[400px]" src={edit.info.imageUrl} alt="업로드 이미지" loading="lazy" /> : <img className="w-[300px] h-[400px]" src={preview !== "" ? String(preview) : nothing} alt={`미리보기`} />}
+
         <input className="fileInput" type="file" ref={imgFile} onChange={imgFileHandler} accept=".gif, .jpg, .png, .jpeg" />
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
@@ -263,8 +280,10 @@ const Add = (edit: editProps) => {
           />}
 
       </form>
-      {lat !== null && longt !== null && net && < GMap {...position} />}
-      <button onClick={submitHandler} >test Btn</button>
+      <div className="flex flex-col items-center w-[500px] pl-[40px]">
+        <button className="mb-[40px]" onClick={submitHandler} >test Btn</button>
+        {lat !== null && longt !== null && net ? < GMap {...position} /> : <div>  위치 정보가 없습니다. </div>}
+      </div>
     </div>
 
   )
