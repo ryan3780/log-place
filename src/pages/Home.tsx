@@ -54,7 +54,7 @@ const Home = () => {
 
 
   return (
-    <div className="max-w-5xl m-auto py-10 px-0">
+    <div className="flex justify-center items-center m-auto py-10 px-0">
       <div className="flex gap-5">
         <div className="flex flex-col gap-5">
           {allLogsData.length > 0 && divideColumn(allLogsData).firstColumn.map((log, idx) => {

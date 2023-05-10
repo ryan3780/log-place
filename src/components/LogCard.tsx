@@ -19,14 +19,12 @@ const LogCard = (CardInfo: LogCardElement) => {
 
   return (
     <div className="relative h-fit" onClick={navHandler}>
-      <div >
-        <img onLoad={() => imgLoading()} src={CardInfo.imageUrl} alt="업로드 이미지" className="w-full rounded-md h-full object-cover" loading="lazy" />
+      <div className="max-w-[300px]" >
+        <img onLoad={() => imgLoading()} src={CardInfo.imageUrl} alt="업로드 이미지" className=" rounded-md h-full object-cover" loading="lazy" />
       </div>
 
       {loading &&
-        <div className="absolute h-full inset-x-0 top-0 text-rose-500"><div>
-          {CardInfo.oneLineComment}
-        </div>
+        <div className="absolute h-full inset-x-0 top-0 text-white text-center ">
           <div>
             {CardInfo.date}
           </div>

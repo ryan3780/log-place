@@ -50,7 +50,8 @@ const Add = (edit: editProps) => {
   const validateSubmit = () => {
     console.log(logDate)
     if (!logText.current.value) {
-      alert("input")
+      alert("추억을 위한 글이 없습니다.")
+      logText.current.focus()
       return false
     }
     else if (!preview) {
@@ -201,7 +202,7 @@ const Add = (edit: editProps) => {
           setLat(decimalLatitude)
           setLongt(deciamlLongitude)
           setLogDate(new Intl.DateTimeFormat('ko', { dateStyle: "full" }).format(new Date(DateTime.split(" ")[0].replaceAll(":", "-"))))
-          // logDateHandler(new Date(DateTime.split(" ")[0].replaceAll(":", "-")))
+          logDateHandler(new Date(DateTime.split(" ")[0].replaceAll(":", "-")))
 
 
         } else {
@@ -226,9 +227,8 @@ const Add = (edit: editProps) => {
   }
 
   const logDateHandler = (currentDate: Date) => {
-
     setSelectedDate(currentDate)
-
+    setLogDate(new Intl.DateTimeFormat('ko', { dateStyle: "full" }).format(new Date(currentDate)))
   }
 
   useEffect(() => {
@@ -236,29 +236,32 @@ const Add = (edit: editProps) => {
       setSelectedDate(new Date(edit.info.date.replace(/[^0-9]/g, " ")))
       setPreview(edit.info.imageUrl)
       setLogDate(edit.info.date)
-      setLat(Number(edit.info.lat))
-      setLongt(Number(edit.info.longt))
+      setLat(edit.info.lat ? Number(edit.info.lat) : null)
+      setLongt(edit.info.longt ? Number(edit.info.longt) : null)
       logText.current.value = edit.info.oneLineComment
 
     }
   }, [edit])
 
-
-
   const net = useCheckNetwork()
 
-  console.log(logDate)
 
   return (
 
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center mr-[15px]">
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 " >
 
         {edit.isEdit && preview === "" ? <img className="w-[300px] h-[400px]" src={edit.info.imageUrl} alt="업로드 이미지" loading="lazy" /> : <img className="w-[300px] h-[400px]" src={preview !== "" ? String(preview) : nothing} alt={`미리보기`} />}
 
-        <input className="fileInput" type="file" ref={imgFile} onChange={imgFileHandler} accept=".gif, .jpg, .png, .jpeg" />
+        <input className="text-sm text-grey-500
+            file:mr-5 file:py-2 file:px-6
+            file:rounded-full file:border-0
+            file:text-sm file:font-medium
+            file:bg-blue-50 file:text-blue-700
+            hover:file:cursor-pointer hover:file:bg-amber-50
+            hover:file:text-amber-700 mt-[20px] mb-[20px]" type="file" ref={imgFile} onChange={imgFileHandler} accept=".gif, .jpg, .png, .jpeg" />
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+          <label className="block text-gray-700 text-sm font-bold mb-2 " htmlFor="username">
             추억을 위한 한줄
           </label>
           {edit && edit.info ? <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="editInput" type="text" placeholder={edit.info.oneLineComment} ref={logText} /> : <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="addInput" type="text" placeholder="" ref={logText} />}
@@ -281,7 +284,7 @@ const Add = (edit: editProps) => {
 
       </form>
       <div className="flex flex-col items-center w-[500px] pl-[40px]">
-        <button className="mb-[40px]" onClick={submitHandler} >test Btn</button>
+        <button className="mb-[40px] bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onClick={submitHandler}> 저장하기 </button>
         {lat !== null && longt !== null && net ? < GMap {...position} /> : <div>  위치 정보가 없습니다. </div>}
       </div>
     </div>

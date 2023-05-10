@@ -17,7 +17,7 @@ const GeneralLayout: React.FC<GeneralLayoutProps> = ({ children }) => {
 
 
   return (
-    <div className="general-layou">
+    <div className="general-layout">
       <Header HeaderContent={HeaderContent} />
       <div className="general-layout__body">
         {children}
