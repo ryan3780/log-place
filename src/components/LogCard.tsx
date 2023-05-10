@@ -24,7 +24,7 @@ const LogCard = (CardInfo: LogCardElement) => {
       </div>
 
       {loading &&
-        <div className="absolute h-full inset-x-0 top-0 text-white text-center ">
+        <div className="absolute h-full inset-x-0 top-0 text-white text-center">
           <div>
             {CardInfo.date}
           </div>
