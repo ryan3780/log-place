@@ -18,7 +18,7 @@ const LogCard = (CardInfo: LogCardElement) => {
   }
 
   return (
-    <div className="relative h-fit" onClick={navHandler}>
+    <div className="relative h-fit " onClick={navHandler}>
       <div className="max-w-[300px]" >
         <img onLoad={() => imgLoading()} src={CardInfo.imageUrl} alt="업로드 이미지" className=" rounded-md h-full object-cover" loading="lazy" />
       </div>
