@@ -15,20 +15,6 @@ module.exports = {
       imageUrl: "https://picsum.photos/300/200",
       lat: 1.1,
       longt: 2.5
-    }, {
-      id: 2,
-      oneLineComment: "Army Tank",
-      date: "1203",
-      imageUrl: "https://picsum.photos/300/200",
-      lat: 1.1,
-      longt: 2.5
-    }, {
-      id: 2,
-      oneLineComment: "Army Tank",
-      date: "1203",
-      imageUrl: "https://picsum.photos/300/200",
-      lat: 1.1,
-      longt: 2.5
     }
   ],
 };
