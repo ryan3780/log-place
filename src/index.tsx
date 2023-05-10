@@ -10,7 +10,7 @@ import {
 
 
 const client = new ApolloClient({
-  uri: "https://log-place.vercel.app:4000",
+  uri: "http://localhost:4000/",
   cache: new InMemoryCache(),
 });
 
