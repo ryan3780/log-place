@@ -30,14 +30,15 @@
   "scripts": {
     "build:css": "postcss src/styles/tailwind.css -o src/styles/app.css",
     "watch:css": "postcss src/styles/tailwind.css -o src/styles/app.css --watch",
-    "react-scripts:start": "sleep 5 && react-scripts start",
+    "react-scripts:start": "concurrently \"yarn start\" \"yarn run json-server-gql\" ",
     "start": "run-p watch:css react-scripts:start",
     "build": "run-s build:css react-scripts:build",
     "react-scripts:build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "json-server-gql": "json-graphql-server db.js --p 4000",
-    "dev": "concurrently \"yarn start\" \"yarn run json-server-gql\" "
+    "dev": "concurrently \"yarn start\" \"yarn run json-server-gql\" ",
+    "react-scripts:wait": "sleep 5 && react-scripts start"
   },
   "eslintConfig": {
     "extends": [
