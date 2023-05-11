@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "../hooks/useRouter"
 import { LogCardElement } from "../types/LogCard"
 
@@ -9,6 +9,8 @@ const LogCard = (CardInfo: LogCardElement) => {
 
   const { routeTo } = useRouter();
 
+  const imgRef = useRef<HTMLImageElement>();
+
   const navHandler = () => {
     routeTo(`detail/${String(CardInfo.id)}`)
   }
@@ -17,17 +19,17 @@ const LogCard = (CardInfo: LogCardElement) => {
     setLoading(true)
   }
 
+
+
   return (
     <div className="relative h-fit " onClick={navHandler}>
       <div className="max-w-[300px]" >
-        <img onLoad={() => imgLoading()} src={CardInfo.imageUrl} alt="업로드 이미지" className=" rounded-md h-full object-cover" loading="lazy" />
+        <img ref={imgRef} onLoad={() => imgLoading()} src={CardInfo.imageUrl} alt="업로드 이미지" className=" rounded-md h-full object-cover" loading="lazy" />
       </div>
 
       {loading &&
-        <div className="absolute h-full inset-x-0 top-0 text-white text-center">
-          <div>
-            {CardInfo.date}
-          </div>
+        <div className={imgRef.current.width > 300 ? "absolute h-full inset-x-0 top-0 text-white text-center" : `absolute h-full inset-x-0 top-0 text-white text-center w-[${imgRef.current.width}px]`}>
+          {CardInfo.date}
         </div>}
 
     </div>

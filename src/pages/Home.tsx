@@ -20,12 +20,12 @@ const Home = () => {
   }, [data]);
 
 
-  const gridEnd = Math.floor(allLogsData.length / 3)
-
   useMemo(() => {
 
   }, [])
   const divideColumn = (data: LogCardElement[]) => {
+
+    const gridEnd = Math.ceil(data.length / 3)
 
     let firstColumn: LogCardElement[]
     let secondeColumn: LogCardElement[]
@@ -42,9 +42,11 @@ const Home = () => {
       thirdColumn = [data[2]]
     }
     else {
+
       firstColumn = [...data.slice(0, gridEnd)]
       secondeColumn = [...data.slice(gridEnd, gridEnd * 2)]
       thirdColumn = [...data.slice(gridEnd * 2)]
+
     }
 
 

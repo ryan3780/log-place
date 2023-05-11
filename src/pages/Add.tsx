@@ -29,7 +29,7 @@ interface editProps {
 const Add = (edit: editProps) => {
 
   const [preview, setPreview] = useState<string>("");
-  const [selectedDate, setSelectedDate] = useState<Date>(null);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [logDate, setLogDate] = useState<string>("");
   const [lat, setLat] = useState<number>(null);
   const [longt, setLongt] = useState<number>(null);
@@ -48,18 +48,18 @@ const Add = (edit: editProps) => {
   const navigate = useNavigate()
 
   const validateSubmit = () => {
-    console.log(logDate)
+
     if (!logText.current.value) {
       alert("추억을 위한 글이 없습니다.")
       logText.current.focus()
       return false
     }
     else if (!preview) {
-      alert("no img")
+      alert("이미지가 없습니다.")
       return false
     }
     else if (!logDate) {
-      alert("no Date")
+      alert("날짜를 기입해주세요.")
       return false
     }
     return true
@@ -150,6 +150,7 @@ const Add = (edit: editProps) => {
       setSelectedDate(null)
       return alertHandler()
     }
+    console.log(String(res))
     setPreview(String(res));
   }
 
@@ -161,8 +162,6 @@ const Add = (edit: editProps) => {
 
       reader.onload = () => {
 
-        // setLogDate("")
-        // setSelectedDate(null)
         setPreview(reader.result as string)
         resizeImage(reader.result as string)
 
@@ -204,11 +203,9 @@ const Add = (edit: editProps) => {
           setLogDate(new Intl.DateTimeFormat('ko', { dateStyle: "full" }).format(new Date(DateTime.split(" ")[0].replaceAll(":", "-"))))
           logDateHandler(new Date(DateTime.split(" ")[0].replaceAll(":", "-")))
 
-
         } else {
-
-          setLogDate("")
-          setSelectedDate(null)
+          logDateHandler(new Date())
+          setSelectedDate(new Date())
           setLat(null)
           setLongt(null)
         }
@@ -217,11 +214,21 @@ const Add = (edit: editProps) => {
 
     } else {
 
-      setPreview("")
-      setLogDate("")
-      setSelectedDate(null)
-      setLat(null)
-      setLongt(null)
+      if (edit.isEdit) {
+        setSelectedDate(new Date(edit.info.date.replace(/[^0-9]/g, " ")))
+        setPreview(edit.info.imageUrl)
+        setLogDate(edit.info.date)
+        setLat(edit.info.lat ? Number(edit.info.lat) : null)
+        setLongt(edit.info.longt ? Number(edit.info.longt) : null)
+      } else {
+
+        setPreview("")
+        setLogDate(new Intl.DateTimeFormat('ko', { dateStyle: "full" }).format(new Date()))
+        setSelectedDate(new Date())
+        setLat(null)
+        setLongt(null)
+      }
+
     }
 
   }
@@ -245,10 +252,27 @@ const Add = (edit: editProps) => {
 
   const net = useCheckNetwork()
 
+  const xssHandler = () => {
+
+    let oneLineComment = logText.current.value
+
+    if (logText.current.value.length === 19) {
+      console.log(logText.current.value.length)
+      alert('19자 까지만 입력이 가능합니다')
+    }
+
+    oneLineComment = oneLineComment.replace(/<script[^>]*>([\S\s]*?)<\/script>/g, '');
+    oneLineComment = oneLineComment.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/g, '');
+
+    logText.current.value = oneLineComment.slice(0, 19)
+
+  }
+
+  console.log(logDate)
 
   return (
 
-    <div className="flex justify-center items-center mr-[15px]">
+    <div className="flex justify-center items-center">
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 " >
 
         {edit.isEdit && preview === "" ? <img className="w-[300px] h-[400px]" src={edit.info.imageUrl} alt="업로드 이미지" loading="lazy" /> : <img className="w-[300px] h-[400px]" src={preview !== "" ? String(preview) : nothing} alt={`미리보기`} />}
@@ -264,7 +288,7 @@ const Add = (edit: editProps) => {
           <label className="block text-gray-700 text-sm font-bold mb-2 " htmlFor="username">
             추억을 위한 한줄
           </label>
-          {edit && edit.info ? <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="editInput" type="text" placeholder={edit.info.oneLineComment} ref={logText} /> : <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="addInput" type="text" placeholder="" ref={logText} />}
+          {edit && edit.info ? <input maxLength={33} onChange={xssHandler} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="editInput" type="text" placeholder={edit.info.oneLineComment} ref={logText} /> : <input maxLength={33} onChange={xssHandler} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="addInput" type="text" placeholder="" ref={logText} />}
 
 
         </div>
