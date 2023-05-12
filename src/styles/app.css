@@ -692,14 +692,11 @@ video {
 .pt-6 {
   padding-top: 1.5rem;
 }
-.pt-\[40px\] {
-  padding-top: 40px;
-}
-.pt-\[20px\] {
-  padding-top: 20px;
-}
 .pt-\[30px\] {
   padding-top: 30px;
+}
+.pt-\[40px\] {
+  padding-top: 40px;
 }
 .text-center {
   text-align: center;
