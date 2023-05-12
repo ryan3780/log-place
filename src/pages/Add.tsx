@@ -103,8 +103,18 @@ const Add = (edit: editProps) => {
 
   const alertHandler = (size: number) => {
     alert(`리사이즈 된 인코딩 결과 ${size / 1000}KB 입니다. \nBase64 인코딩 결과가 100KB 이하만 가능합니다.`)
-    setPreview("")
+
+    if (edit.isEdit) {
+      setPreview(edit.info.imageUrl)
+
+    } else {
+      setLogDate("")
+      setSelectedDate(null)
+      setPreview("")
+    }
+
     imgFile.current.value = ""
+
   }
 
   const resizeImage = async (base64Str: string, maxWidth = 600, maxHeight = 400) => {
@@ -146,10 +156,10 @@ const Add = (edit: editProps) => {
     });
 
     if (String(res).length > 100000) {
-      setLogDate("")
-      setSelectedDate(null)
+
       return alertHandler(String(res).length)
     }
+
     setPreview(String(res));
   }
 
