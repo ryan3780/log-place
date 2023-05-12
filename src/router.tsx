@@ -6,6 +6,7 @@ import GeneralLayout from './layout/GeneralLayout'
 import Add from './pages/Add'
 import Detail from './pages/Detail'
 import Edit from './pages/Edit'
+import About from './pages/About'
 
 
 
@@ -15,7 +16,7 @@ interface RouterElement {
   label: string // 사이드바에 표시할 페이지 이름
   element: React.ReactNode // 페이지 엘리먼트
   withHeader?: boolean // 헤더가 필요한지 여부
-  includeMenu?: boolean;
+  includeMenu?: boolean; // 헤더의 메뉴를 포함할 것인지 여부
 }
 
 const routerData: RouterElement[] = [
@@ -52,6 +53,15 @@ const routerData: RouterElement[] = [
     withHeader: true,
     includeMenu: false
   },
+  {
+    id: 4,
+    path: '/about',
+    label: 'About',
+    element: <About />,
+    withHeader: true,
+    includeMenu: true
+  },
+
   // {
   //   id: 1,
   //   path: '/login',
