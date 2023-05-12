@@ -106,6 +106,9 @@ const Add = (edit: editProps) => {
 
     if (edit.isEdit) {
       setPreview(edit.info.imageUrl)
+      setSelectedDate(new Date(edit.info.date.replace(/[^0-9]/g, " ")))
+      setPreview(edit.info.imageUrl)
+      setLogDate(edit.info.date)
 
     } else {
       setLogDate("")
