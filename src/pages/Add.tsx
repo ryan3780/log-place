@@ -50,7 +50,7 @@ const Add = (edit: editProps) => {
   const validateSubmit = () => {
 
     if (!logText.current.value) {
-      alert("추억을 위한 글이 없습니다.")
+      alert("추억을 위한 한 줄이 없습니다.")
       logText.current.focus()
       return false
     }
@@ -101,8 +101,8 @@ const Add = (edit: editProps) => {
     }
   };
 
-  const alertHandler = () => {
-    alert("용량이 너무 큽니다.")
+  const alertHandler = (size: number) => {
+    alert(`리사이즈 된 인코딩 결과 ${size / 1000}KB 입니다. \nBase64 인코딩 결과가 100KB 이하만 가능합니다.`)
     setPreview("")
     imgFile.current.value = ""
   }
@@ -148,9 +148,8 @@ const Add = (edit: editProps) => {
     if (String(res).length > 100000) {
       setLogDate("")
       setSelectedDate(null)
-      return alertHandler()
+      return alertHandler(String(res).length)
     }
-    console.log(String(res))
     setPreview(String(res));
   }
 
@@ -257,7 +256,6 @@ const Add = (edit: editProps) => {
     let oneLineComment = logText.current.value
 
     if (logText.current.value.length === 19) {
-      console.log(logText.current.value.length)
       alert('19자 까지만 입력이 가능합니다')
     }
 
@@ -268,7 +266,6 @@ const Add = (edit: editProps) => {
 
   }
 
-  console.log(logDate)
 
   return (
 
@@ -286,7 +283,7 @@ const Add = (edit: editProps) => {
             hover:file:text-amber-700 mt-[20px] mb-[20px]" type="file" ref={imgFile} onChange={imgFileHandler} accept=".gif, .jpg, .png, .jpeg" />
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2 " htmlFor="username">
-            추억을 위한 한줄
+            추억을 위한 한 줄
           </label>
           {edit && edit.info ? <input maxLength={33} onChange={xssHandler} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="editInput" type="text" placeholder={edit.info.oneLineComment} ref={logText} /> : <input maxLength={33} onChange={xssHandler} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="addInput" type="text" placeholder="" ref={logText} />}
 
@@ -298,7 +295,7 @@ const Add = (edit: editProps) => {
             showYearDropdown
             dropdownMode="select"
             locale={ko}    // 언어설정 기본값은 영어
-            dateFormat="yyyy년도 MM월 dd일 eee요일"    // 날짜 형식 설정
+            dateFormat="yyyy년 M월 dd일 eee요일"    // 날짜 형식 설정
             className="input-datepicker w-full"    // 클래스 명 지정 css주기 위해
             closeOnScroll={true}    // 스크롤을 움직였을 때 자동으로 닫히도록 설정 기본값 false
             placeholderText="기록할 날짜 선택"    // placeholder

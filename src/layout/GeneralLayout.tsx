@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Header from '../components/Header'
 import { HeaderContent } from '../router'
 
@@ -8,13 +8,6 @@ interface GeneralLayoutProps {
 }
 
 const GeneralLayout: React.FC<GeneralLayoutProps> = ({ children }) => {
-
-  useEffect(() => {
-
-    console.log('page changed!')
-
-  }, [children])
-
 
   return (
     <div className="general-layout">

@@ -14,7 +14,7 @@ const Home = () => {
 
   useEffect(() => {
     if (data?.allLogs) {
-      setAllLogsData(data.allLogs);
+      setAllLogsData(data.allLogs.sort((a, b) => b.id - a.id));
     }
 
   }, [data]);

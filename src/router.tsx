@@ -30,7 +30,7 @@ const routerData: RouterElement[] = [
   {
     id: 1,
     path: '/add',
-    label: 'add',
+    label: 'Add',
     element: <Add />,
     withHeader: true,
     includeMenu: true
@@ -59,20 +59,7 @@ const routerData: RouterElement[] = [
   //   element: <Login />,
   //   withAuth: false
   // },
-  // {
-  //   id: 3,
-  //   path: '/page-b',
-  //   label: '페이지 B',
-  //   element: <PageB />,
-  //   withAuth: true
-  // },
-  // {
-  //   id: 4,
-  //   path: '/page-c',
-  //   label: '페이지 C',
-  //   element: <PageC />,
-  //   withAuth: true
-  // }
+
 ]
 
 export const routers: RemixRouter = createBrowserRouter(

@@ -24,7 +24,7 @@ const Header: React.FC<HeaderProps> = ({ HeaderContent }) => {
           return (
             <div
               key={element.path}
-              className={currentPath === element.path ? 'header-menu selected mr-[45px] text-3xl font-sans cursor-pointer text-purple-400' : 'header-menu text-3xl font-sans cursor-pointer mr-[45px]'}
+              className={currentPath === element.path ? 'header-menu selected mr-[45px] text-3xl font-sans cursor-pointer text-[#4D24E2]' : 'header-menu text-3xl font-sans cursor-pointer mr-[45px]'}
               onClick={() => HeaderMenuClickHandler(element.path)}>
               {element.label}
             </div>
