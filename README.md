@@ -1,14 +1,10 @@
 ## 소개 
-</br>
 
 ### 방문한 숙소를 찍은 사진과 그 당시 느낀 감정을 한 줄로 작성하고, 업로드한 사진에 날짜와 위치정보가 있으면 자동으로 날짜와 구글맵으로 표기합니다. 오픈라인 상에서 일렉트론을 활용하여 기록을 남기기 위한 프로그램을 웹 페이지로 만들었습니다.
-</br>
 
 ## 이용한 도구
-</br>
 
 ### <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/Typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/> <img src="https://img.shields.io/badge/graphql-E10098?style=for-the-badge&logo=graphql&logoColor=white"/> <img src="https://img.shields.io/badge/tailwindcss-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white"/>
-</br>
 
 ## 구조
 📦src  
@@ -25,6 +21,5 @@
  ┣ 📜index.tsx  
  ┣ 📜router.tsx
 
-</br>
 
 ##  
