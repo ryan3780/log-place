@@ -67,7 +67,6 @@ const Add = (edit: editProps) => {
 
   const submitHandler = () => {
 
-
     if (!validateSubmit()) return
 
     if (edit.isEdit) {
