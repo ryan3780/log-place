@@ -10,7 +10,7 @@ import {
 
 
 const client = new ApolloClient({
-  uri: "https://3840-211-36-51-73.ngrok-free.app",
+  uri: "https://ba95-211-36-51-73.ngrok-free.app",
   cache: new InMemoryCache(),
 });
 
